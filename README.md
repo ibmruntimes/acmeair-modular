@@ -1,3 +1,10 @@
+# Modular Acme Air
+
+This is a demo to convert the Acme Air microservices version to support Java 9 Modularity.
+This repo is a fork of the Acme Air available [here.](https://github.com/blueperf/acmeair)
+
+Please see the steps documented [here](Documentation/Modularizing-AcmeAir-Steps.pdf) to convert the application to be modular.
+
 # Acme Air Sample and Benchmark (wasperf version)
 
 This application shows an implementation of a fictitious airline called "Acme Air".  The application was built with some key business requirements: the ability to scale to billions of web API calls per day, the need to develop and deploy the application targeting multiple cloud platforms (including Public, Dedicated, Private and hybrid) and the need to support multiple channels for user interaction (with mobile enablement first and browser/Web 2.0 second).The application can be deployed both on-prem as well as on Cloud platforms. 

@@ -1,6 +1,6 @@
 
 task wrapper(type: Wrapper) {
-   gradleVersion = '2.6'
+   gradleVersion = '4.2'
 }
 
 subprojects {
@@ -11,6 +11,14 @@ subprojects {
         mavenLocal()
     }
 
+    def addMods = "--add-modules"
+    def mod1 = "java.xml.bind"
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << addMods
+        options.compilerArgs << mod1
+    }
+
     dependencies {
         compile 'javax:javaee-web-api:7.0'
     }
@@ -18,6 +26,22 @@ subprojects {
 
 project(':acmeair-webapp') {
     apply plugin: 'war'
+
+    def servicesJar = project(':acmeair-services').jar.outputs.files.getAsPath()
+    def servicesMongoJar = project(':acmeair-services-mongo').jar.outputs.files.getAsPath()
+    def loaderJar = project(':acmeair-loader').jar.outputs.files.getAsPath()
+    def files = [servicesJar, servicesMongoJar, loaderJar]
+
+    def modulePath = files.join("$File.pathSeparator")
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '--module-path'
+        options.compilerArgs << modulePath
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.webapp=ALL-UNNAMED'
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.services=ALL-UNNAMED'
+    }
 
     dependencies {
         compile project(':acmeair-services')
@@ -30,6 +54,21 @@ project(':acmeair-webapp') {
 project(':acmeair-mainapp') {
     apply plugin: 'war'
 
+    def servicesJar = project(':acmeair-services').jar.outputs.files.getAsPath()
+    def servicesMongoJar = project(':acmeair-services-mongo').jar.outputs.files.getAsPath()
+    def loaderJar = project(':acmeair-loader').jar.outputs.files.getAsPath()
+    def files = [servicesJar, servicesMongoJar, loaderJar]
+
+    def modulePath = files.join("$File.pathSeparator")
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '--module-path'
+        options.compilerArgs << modulePath
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.mainapp=ALL-UNNAMED'
+
+    }
+
     dependencies {
     	compile project(':acmeair-services')
         providedRuntime 'javax:javaee-web-api:7.0'
@@ -38,6 +77,22 @@ project(':acmeair-mainapp') {
 
 project(':acmeair-as') {
     apply plugin: 'war'
+
+    def servicesJar = project(':acmeair-services').jar.outputs.files.getAsPath()
+    def servicesMongoJar = project(':acmeair-services-mongo').jar.outputs.files.getAsPath()
+    def loaderJar = project(':acmeair-loader').jar.outputs.files.getAsPath()
+    def files = [servicesJar, servicesMongoJar, loaderJar]
+
+    def modulePath = files.join("$File.pathSeparator")
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '--module-path'
+        options.compilerArgs << modulePath
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.as=ALL-UNNAMED'
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.services=ALL-UNNAMED'
+    }
 
     dependencies {
         compile project(':acmeair-services')
@@ -50,6 +105,21 @@ project(':acmeair-as') {
 project(':acmeair-bs') {
     apply plugin: 'war'
 
+    def servicesJar = project(':acmeair-services').jar.outputs.files.getAsPath()
+    def servicesMongoJar = project(':acmeair-services-mongo').jar.outputs.files.getAsPath()
+    def loaderJar = project(':acmeair-loader').jar.outputs.files.getAsPath()
+    def files = [servicesJar, servicesMongoJar, loaderJar]
+
+    def modulePath = files.join("$File.pathSeparator")
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '--module-path'
+        options.compilerArgs << modulePath
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.bs=ALL-UNNAMED'
+
+    }
+
     dependencies {
         compile project(':acmeair-services')
         compile project(':acmeair-services-mongo')
@@ -60,6 +130,21 @@ project(':acmeair-bs') {
 
 project(':acmeair-cs') {
     apply plugin: 'war'
+
+    def servicesJar = project(':acmeair-services').jar.outputs.files.getAsPath()
+    def servicesMongoJar = project(':acmeair-services-mongo').jar.outputs.files.getAsPath()
+    def loaderJar = project(':acmeair-loader').jar.outputs.files.getAsPath()
+    def files = [servicesJar, servicesMongoJar, loaderJar]
+
+    def modulePath = files.join("$File.pathSeparator")
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '--module-path'
+        options.compilerArgs << modulePath
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.cs=ALL-UNNAMED'
+
+    }
 
     dependencies {
         compile project(':acmeair-services')
@@ -72,6 +157,21 @@ project(':acmeair-cs') {
 project(':acmeair-fs') {
     apply plugin: 'war'
 
+    def servicesJar = project(':acmeair-services').jar.outputs.files.getAsPath()
+    def servicesMongoJar = project(':acmeair-services-mongo').jar.outputs.files.getAsPath()
+    def loaderJar = project(':acmeair-loader').jar.outputs.files.getAsPath()
+    def files = [servicesJar, servicesMongoJar, loaderJar]
+
+    def modulePath = files.join("$File.pathSeparator")
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '--module-path'
+        options.compilerArgs << modulePath
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.fs=ALL-UNNAMED'
+
+    }
+
     dependencies {
         compile project(':acmeair-services')
         compile project(':acmeair-services-mongo')
@@ -83,32 +183,63 @@ project(':acmeair-fs') {
 project(':acmeair-ss') {
     apply plugin: 'war'
 
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.ss=ALL-UNNAMED'
+
+    }
+
     dependencies {
         providedRuntime 'javax:javaee-web-api:7.0'
     }
 }
 
 project(':acmeair-services-mongo') {
+
+
+    def servicesJar = project(':acmeair-services').jar.outputs.files.getAsPath()
+    def files = [servicesJar]
+
+    def modulePath = files.join("$File.pathSeparator")
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '--module-path'
+        options.compilerArgs << modulePath
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.services.mongo=ALL-UNNAMED'
+    }
     dependencies {
-		compile project(':acmeair-services')
-		compile 'org.mongodb:mongo-java-driver:3.1.1'
-		compile 'org.mongodb:bson:3.1.1'
+        compile project(':acmeair-services')
+        compile 'org.mongodb:mongo-java-driver:3.1.1'
+        compile 'org.mongodb:bson:3.1.1'
         compile 'com.googlecode.json-simple:json-simple:1.1.1'
     }
 }
 
 project(':acmeair-services') {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '--add-reads'
+        options.compilerArgs << 'acmeair.services=ALL-UNNAMED'
+    }
+
     dependencies {
         compile 'com.googlecode.json-simple:json-simple:1.1.1'
     }
 }
 
 project(':acmeair-loader') {
+
+    def servicesJar = project(':acmeair-services').jar.outputs.files.getAsPath()
+    def files = [servicesJar]
+
+    def modulePath = files.join("$File.pathSeparator")
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '--module-path'
+        options.compilerArgs << modulePath
+    }
+
     dependencies {
         compile project(':acmeair-services')
     }
 }
-
-
-
-
